@@ -3,13 +3,13 @@ import prisma from "@/lib";
 import { validateToken } from "@/middlewares/verifyToken";
 import { profileSchema, updateProfileSchema } from "@/schemas/profileSchema";
 import { ValidationError } from "yup";
+import { headerSchema } from "@/schemas/tokenSchema";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const token = req.headers.authorization?.split(" ")[1]!;
-  const user = await validateToken(token, res);
+  const user = await validateToken(req, res);
 
   switch (req.method) {
     case "GET":

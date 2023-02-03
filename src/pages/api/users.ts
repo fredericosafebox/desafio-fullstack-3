@@ -6,6 +6,7 @@ import { ValidationError } from "yup";
 import * as bcrypt from "bcrypt";
 import { INewUser } from "@/interfaces/IUser";
 import verifyNewUserData from "@/middlewares/verifyPhone";
+import { validateToken } from "@/middlewares/verifyToken";
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,6 +14,7 @@ export default async function handler(
 ) {
   switch (req.method) {
     case "GET":
+      const auth = await validateToken(req, res);
       const users = await prisma.user
         .findMany({
           where: { visibility: "VISIBLE" },

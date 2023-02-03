@@ -1,6 +1,6 @@
-import { NextApiResponse } from "next";
+import { NextApiResponse, NextApiRequest } from "next";
 import * as jwt from "jsonwebtoken";
-import schema from "@/schemas/tokenSchema";
+import decodedTokenSchema, { headerSchema } from "@/schemas/tokenSchema";
 import { ValidationError } from "yup";
 import prisma from "@/lib";
 
@@ -9,22 +9,26 @@ interface IToken extends jwt.JwtPayload {
   role?: string;
 }
 
-export async function validateToken(token: string, res: NextApiResponse) {
+export async function validateToken(req: NextApiRequest, res: NextApiResponse) {
   try {
+    await headerSchema.validate(req.headers);
+    const token = req.headers.authorization?.split(" ")[1]!;
     const isValid = jwt.verify(token, "SECRET_KEY");
     if (!isValid) {
       return res.status(401).json({ status: 401, message: "Invalid token" });
     }
     //@ts-ignore
     const decoded: IToken = jwt.decode(token);
-    const foundUser = await schema.validate(decoded).then((data) => {
-      return prisma.user.findFirst({
-        where: {
-          id: data.id,
-          role: data.role,
-        },
+    const foundUser = await decodedTokenSchema
+      .validate(decoded)
+      .then((data) => {
+        return prisma.user.findFirst({
+          where: {
+            id: data.id,
+            role: data.role,
+          },
+        });
       });
-    });
     if (foundUser) {
       return foundUser;
     }

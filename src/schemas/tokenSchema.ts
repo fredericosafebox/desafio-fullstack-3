@@ -9,3 +9,7 @@ const tokenSchema = yup.object({
 });
 
 export default tokenSchema;
+
+export const headerSchema = yup.object({
+  authorization: yup.string().required("Missing authorization headers"),
+});

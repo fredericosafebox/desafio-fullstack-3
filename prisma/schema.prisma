@@ -19,7 +19,7 @@ model User {
   phone      Int        @unique
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @default(now()) @updatedAt
-  contacts   Contact[]
+  contacts   Contact[]  
   role       Role       @default(USER)
   visibility Visibility @default(INVISIBLE)
 }
@@ -29,10 +29,11 @@ model Contact {
   id        Int      @id @default(autoincrement())
   fullName  String   @db.VarChar(120)
   email     String   @db.VarChar(120)
-  phone     Int      @unique
+  phone     Int
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-  users     User[]
+  users     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
 }
 
 enum Role {
