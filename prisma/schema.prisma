@@ -9,3 +9,38 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+/// Model: User - Utilizada para gerenciar o cadastro de novos users
+model User {
+  id         Int        @id @default(autoincrement())
+  fullName   String     @db.VarChar(120)
+  email      String     @unique @db.VarChar(120)
+  password   String     @db.VarChar(200)
+  phone      Int        @unique
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @default(now()) @updatedAt
+  contacts   Contact[]
+  role       Role       @default(USER)
+  visibility Visibility @default(INVISIBLE)
+}
+
+/// Model: Contact - Utilizada dentro do app para gerenciar contatos do user cadastrado
+model Contact {
+  id        Int      @id @default(autoincrement())
+  fullName  String   @db.VarChar(120)
+  email     String   @db.VarChar(120)
+  phone     Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  users     User[]
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum Visibility {
+  VISIBLE
+  INVISIBLE
+}
