@@ -54,13 +54,10 @@ export default async function handler(
             .json({ status: 400, error: error.name, message: error.message });
         }
       }
-
-    case "PATCH":
-      return res.status(200).send("DELETE route");
     case "DELETE":
       const user = await prisma.user.deleteMany();
       return res.status(200).send("DELETE route");
     default:
-      res.status(200).send("OTHER route");
+      res.status(405).send("");
   }
 }
