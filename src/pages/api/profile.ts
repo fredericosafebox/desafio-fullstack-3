@@ -1,9 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "@/lib";
 import { validateToken } from "@/middlewares/verifyToken";
-import { profileSchema, updateProfileSchema } from "@/schemas/profileSchema";
-import { ValidationError } from "yup";
-import { headerSchema } from "@/schemas/tokenSchema";
+import getProfileController from "@/controllers/profile/getProfile.controller";
+import deleteAccountController from "@/controllers/profile/deleteAccount.controller";
+import updateProfileController from "@/controllers/profile/updateProfile.controller";
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,35 +12,15 @@ export default async function handler(
 
   switch (req.method) {
     case "GET":
-      const result = profileSchema.cast(user, { stripUnknown: true });
-      return res.status(200).json(result);
-    case "POST":
-      return res.status(405).send("");
+      await getProfileController(req, res, user!);
+      break;
     case "PATCH":
-      try {
-        const data = await updateProfileSchema
-          .validate(req.body)
-          .then((obj) => {
-            return updateProfileSchema.cast(obj, { stripUnknown: true });
-          });
-        const updatedUser = await prisma.user.update({
-          where: { id: user!.id },
-          data,
-        });
-        return res.status(200).send({ message: "user updated" });
-      } catch (error) {
-        if (error instanceof ValidationError) {
-          return res
-            .status(400)
-            .json({ status: 400, error: error.type, message: error.message });
-        }
-        return res.status(500).json(error);
-      }
-
+      await updateProfileController(req, res, user!);
+      break;
     case "DELETE":
-      const deleted = await prisma.user.delete({ where: { id: user!.id } });
-      return res.status(204).json({ message: "user deleted" });
+      await deleteAccountController(req, res, user!);
+      break;
     default:
-      return;
+      return res.status(405).send("");
   }
 }
