@@ -12,7 +12,6 @@ export default async function loginController(
       return schema.cast(data, { stripUnknown: true });
     });
     const token = await loginService(res, email!, password!);
-    console.warn("Chegou aqui");
     if (!token) {
       return res
         .status(400)

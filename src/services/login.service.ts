@@ -7,8 +7,7 @@ export default async function loginService(
   email: string,
   password: string
 ): Promise<string | boolean> {
-  const user = await prisma.user.findFirst({ where: { email } });
-  console.warn("chegou aqui");
+  const user = await prisma.user.findUnique({ where: { email } });
   if (!user) {
     return false;
   }

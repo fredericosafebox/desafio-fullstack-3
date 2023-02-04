@@ -13,27 +13,31 @@ datasource db {
 /// Model: User - Utilizada para gerenciar o cadastro de novos users
 model User {
   id         Int        @id @default(autoincrement())
-  fullName   String     @db.VarChar(120)
+  fullName   String     @map("full_name") @db.VarChar(120)
   email      String     @unique @db.VarChar(120)
   password   String     @db.VarChar(200)
   phone      Int        @unique
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @default(now()) @updatedAt
-  contacts   Contact[]  
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime   @default(now()) @updatedAt @map("updated_at")
+  contacts   Contact[]
   role       Role       @default(USER)
   visibility Visibility @default(INVISIBLE)
+
+  @@map("users")
 }
 
 /// Model: Contact - Utilizada dentro do app para gerenciar contatos do user cadastrado
 model Contact {
   id        Int      @id @default(autoincrement())
-  fullName  String   @db.VarChar(120)
+  fullName  String   @map("full_name") @db.VarChar(120)
   email     String   @db.VarChar(120)
   phone     Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
   users     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
+
+  @@map("contacts")
 }
 
 enum Role {
