@@ -5,6 +5,7 @@ import IAuth from "@/interfaces/IAuth";
 
 const initialState: IAuth = {
   authState: false,
+  token: null,
 };
 
 export const authSlice = createSlice({
@@ -13,6 +14,13 @@ export const authSlice = createSlice({
   reducers: {
     authenticate: (state, action: PayloadAction<boolean>) => {
       state.authState = action.payload;
+    },
+    setToken: (state, action: PayloadAction<string>) => {
+      state.token = action.payload;
+    },
+    unauthorize: (state) => {
+      state.token = null;
+      state.authState = false;
     },
   },
   extraReducers: {
@@ -25,5 +33,5 @@ export const authSlice = createSlice({
   },
 });
 
-export const { authenticate } = authSlice.actions;
+export const { authenticate, setToken, unauthorize } = authSlice.actions;
 export default authSlice.reducer;

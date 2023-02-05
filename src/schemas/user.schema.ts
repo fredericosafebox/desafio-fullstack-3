@@ -11,7 +11,10 @@ export const createUserSchema = yup.object({
     .min(8, "Senha deve conter no mínimo 8 caracteres")
     .max(20, "Senha deve conter no máximo 20 caracteres")
     .required("Senha é obrigatório"),
-  phone: yup.number().required("Telefone é obrigatório"),
+  phone: yup
+    .number()
+    .typeError("Telefone deve conter apenas numeros")
+    .required("Telefone é obrigatório"),
 });
 
 export const readUserSchema = yup.object({
