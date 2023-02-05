@@ -14,37 +14,43 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 
 export default function Home() {
+  const auth = useAppSelector((state) => state.auth.authState);
   const view = useAppSelector((state) => state.home.view);
   const dispatch = useAppDispatch();
   const router = useRouter();
 
+  console.log("hello");
+
   useEffect(() => {
-    const token = window.localStorage.getItem("token");
-    if (!token) {
-      dispatch(unauthorize());
-    } else {
-      const validate = async () => {
-        const user = await api
-          .get("/profile", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          .then((res) => {
-            console.log(res);
-            dispatch(setToken(token.split("")[1]));
-            dispatch(authenticate(true));
-            toast.success("Bem-vindo de volta!");
-            router.replace("/dashboard");
-          })
-          .catch((err) => {
-            window.localStorage.removeItem("token");
-            toast.error("Sessão expirada. Por favor faça login novamente.");
-          });
-      };
-      validate();
+    if (!auth) {
+      const token = window.localStorage.getItem("token");
+      if (!token) {
+        dispatch(unauthorize());
+      } else {
+        const validate = async () => {
+          const user = await api
+            .get("/profile", {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            })
+            .then((res) => {
+              console.log(res);
+              dispatch(setToken(token));
+              dispatch(authenticate(true));
+              toast.success("Bem-vindo de volta!");
+              router.replace("/dashboard");
+            })
+            .catch((err) => {
+              window.localStorage.removeItem("token");
+              dispatch(unauthorize());
+              toast.error("Sessão expirada. Por favor faça login novamente.");
+            });
+        };
+        validate();
+      }
     }
-  }, []);
+  });
 
   return (
     <>
@@ -54,8 +60,8 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <AnimatePresence mode="wait">
-        {view === "SIGNIN" && <LoginForm key={1} />}
-        {view === "SIGNUP" && <RegisterForm key={2} />}
+        {view === "SIGNIN" && <LoginForm key={3} />}
+        {view === "SIGNUP" && <RegisterForm key={4} />}
       </AnimatePresence>
     </>
   );

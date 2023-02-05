@@ -3,6 +3,7 @@ import { validateToken } from "@/middlewares/verifyToken";
 import getProfileController from "@/controllers/profile/getProfile.controller";
 import deleteAccountController from "@/controllers/profile/deleteAccount.controller";
 import updateProfileController from "@/controllers/profile/updateProfile.controller";
+import prisma from "@/lib";
 
 export default async function handler(
   req: NextApiRequest,

@@ -13,13 +13,11 @@ const open = Open_Sans({
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <>
-      <main className={`app ${open.className}`}>
-        <GlobalStyle />
-        <ToastContainer />
-        <Component {...pageProps} />
-      </main>
-    </>
+    <main className={`app ${open.className}`}>
+      <GlobalStyle />
+      <ToastContainer />
+      <Component {...pageProps} />
+    </main>
   );
 }
 

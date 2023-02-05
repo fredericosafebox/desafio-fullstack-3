@@ -1,4 +1,3 @@
-import prisma from "@/lib";
 import { NextApiResponse } from "next";
 
 async function validateNewUserData(

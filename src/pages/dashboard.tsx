@@ -11,49 +11,59 @@ import { toast } from "react-toastify";
 
 export default function Dashboard() {
   const router = useRouter();
-  const auth = useAppSelector((state) => state.auth);
+  const auth = useAppSelector((state) => state.auth.authState);
   const dispatch = useAppDispatch();
 
+  const validate = async (token: string) => {
+    if (!token) {
+      return router.replace("/");
+    }
+    return await api
+      .get("/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        dispatch(authenticate(true));
+        dispatch(setToken(token));
+        toast.success("Bem-vindo de volta!");
+        return res.data;
+      })
+      .catch((err) => {
+        window.localStorage.removeItem("token");
+      });
+  };
+
   useEffect(() => {
-    if (!auth.authState) {
+    if (!auth) {
       const token = window.localStorage.getItem("token");
       if (!token) {
-        toast.error("Sessão expirada. Por favor faça login novamente.");
         router.replace("/");
       } else {
-        const validate = async () => {
-          const user = await api
-            .get("/profile", {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            })
-            .then((res) => {
-              console.log(res);
-              dispatch(setToken(token.split("")[1]));
-              dispatch(authenticate(true));
-            })
-            .catch((err) => {
-              window.localStorage.removeItem("token");
-              toast.error("Sessão expirada. Por favor faça login novamente.");
-              router.replace("/");
-            });
+        const fetchProfile = async () => {
+          const user = await validate(token!);
+          if (!user) {
+            window.localStorage.removeItem("token");
+            toast.error("Sessão expirada. Por favor faça login novamente.");
+            router.replace("/");
+          }
         };
-        validate();
+        fetchProfile();
       }
     }
-  }, [auth.authState]);
+  }, [auth]);
 
   const logout = () => {
     window.localStorage.removeItem("token");
-    router.replace("/");
     toast.success("Sessão encerrada.");
+    dispatch(unauthorize());
   };
 
   return (
     <>
-      <h1>Hello Dashboard</h1>
-      <button onClick={logout}>SAIR</button>
+      {auth && <h1>Hello Dashboard</h1>}
+      <button onClick={() => logout()}>SAIR</button>
     </>
   );
 }

@@ -11,7 +11,9 @@ export default async function loginController(
     const { email, password } = await schema.validate(req.body).then((data) => {
       return schema.cast(data, { stripUnknown: true });
     });
+
     const token = await loginService(res, email!, password!);
+
     if (!token) {
       return res
         .status(400)
