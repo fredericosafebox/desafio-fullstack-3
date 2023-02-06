@@ -3,7 +3,7 @@ import * as yup from "yup";
 export const createUserSchema = yup.object({
   fullName: yup
     .string()
-    .max(20, "Nome não pode ser maior que 120")
+    .max(120, "Nome não pode ser maior que 120")
     .required("Nome é obrigatório"),
   email: yup.string().email("Email inválido").required("Email é obrigatório"),
   password: yup
@@ -13,6 +13,7 @@ export const createUserSchema = yup.object({
     .required("Senha é obrigatório"),
   phone: yup
     .number()
+    .max(99999999, "Telefone invalido.")
     .typeError("Telefone deve conter apenas numeros")
     .required("Telefone é obrigatório"),
 });

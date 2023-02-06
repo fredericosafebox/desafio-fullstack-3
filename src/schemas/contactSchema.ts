@@ -6,7 +6,11 @@ export const newContactSchema = yup.object({
     .max(120, "Nome não pode ser maior que 120")
     .required("Nome é obrigatório"),
   email: yup.string().email("Email inválido").required("Email é obrigatório"),
-  phone: yup.number().required("Telefone é obrigatório"),
+  phone: yup
+    .number()
+    .typeError("Telefone deve conter apenas numeros")
+    .max(99999999, "Telefone invalido.")
+    .required("Telefone é obrigatório"),
 });
 
 export const readContactSchema = yup.object({

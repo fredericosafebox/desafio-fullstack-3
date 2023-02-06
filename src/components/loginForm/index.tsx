@@ -25,6 +25,7 @@ export default function LoginForm() {
   const router = useRouter();
 
   const fetchToken = async (data: FormData) => {
+    console.log(data);
     const res = await api
       .post("login", data)
       .then(async (res) => {
