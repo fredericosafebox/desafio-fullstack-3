@@ -16,27 +16,27 @@ O backend foi projetado com `Next API`, responsável pelo roteamento da aplicaç
 
 ## Instalação
 
-1- Execute `yarn install` ou `npm install` para instalar as dependências do projeto
-2- Crie um arquivo `.env` seguindo o padrão indicado no arquivo `.env.example`
-3- Crie um banco de dados com o `Postgres`
-4- No `.env` insira uma `DatabaseURL` com o seguinte padrão:
-`postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=SCHEMA`
-5- Um `exemplo` de Database URL: `postgresql://frederico:12345@localhost:3000/bd_desafio_s3?schema=public`
-6- Rode as migrations com o comando `npx prisma generate`
-7- Execute o comando `yarn dev `para lançar a aplicação no ambiente de desenvolvimento
-8- A `API` está disponível no endpoint `/api`, e conta com os seguintes endpoints:
-`/users` - GET e POST
-`/profile` - GET, PATCH, DELETE
-`/login` - POST
-`/contacts` - GET, POST
-`/contacts/:id` - GET, PATCH, DELETE
-9- O frontend conta com uma homepage e o endpoint `/dashboard`
+##### 1- Execute `yarn install` ou `npm install` para instalar as dependências do projeto
+##### 2- Crie um arquivo `.env` seguindo o padrão indicado no arquivo `.env.example`
+##### 3- Crie um banco de dados com o `Postgres`
+##### 4- No `.env` insira uma `DatabaseURL` com o seguinte padrão:
+###### `postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=SCHEMA`
+##### 5- Um `exemplo` de Database URL: `postgresql://frederico:12345@localhost:3000/bd_desafio_s3?schema=public`
+##### 6- Rode as migrations com o comando `npx prisma generate`
+##### 7- Execute o comando `yarn dev `para lançar a aplicação no ambiente de desenvolvimento
+##### 8- A `API` está disponível no endpoint `/api`, e conta com os seguintes endpoints:
+###### `/users` - GET e POST
+###### `/profile` - GET, PATCH, DELETE
+###### `/login` - POST
+###### `/contacts` - GET, POST
+###### `/contacts/:id` - GET, PATCH, DELETE
+##### 9- O frontend conta com uma homepage e o endpoint `/dashboard`
 
-Extras:
+##### Extras:
 
-- Você poderá verificar o banco de dados com mais detalhes usando o comando `npx prisma studio`
-- É possível criar uma conta com privilégios de admin através do email `admin@admin.com`, mas ainda não existem funcionalidades exclusivas
-- Após realizar o login, você notará um switch que controla visibilidade do usuário. Caso ativado, outros usuários poderão te encontrar através da rota `GET /users`, mas a feature ainda não foi implementada.
+###### - Você poderá verificar o banco de dados com mais detalhes usando o comando `npx prisma studio`
+###### - É possível criar uma conta com privilégios de admin através do email `admin@admin.com`, mas ainda não existem funcionalidades exclusivas
+###### - Após realizar o login, você notará um switch que controla visibilidade do usuário. Caso ativado, outros usuários poderão te encontrar através da rota `GET /users`, mas a feature ainda não foi implementada.
 
 ## Stack
 
