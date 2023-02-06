@@ -7,6 +7,7 @@ import {
   unauthorize,
   setToken,
   authenticate,
+  setUser,
 } from "@/store/reducers/authSlice";
 import { useEffect } from "react";
 import api from "@/connection/axios";
@@ -18,8 +19,6 @@ export default function Home() {
   const view = useAppSelector((state) => state.home.view);
   const dispatch = useAppDispatch();
   const router = useRouter();
-
-  console.log("hello");
 
   useEffect(() => {
     if (!auth) {
@@ -35,7 +34,7 @@ export default function Home() {
               },
             })
             .then((res) => {
-              console.log(res);
+              dispatch(setUser(res.data));
               dispatch(setToken(token));
               dispatch(authenticate(true));
               toast.success("Bem-vindo de volta!");

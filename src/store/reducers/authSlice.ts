@@ -1,11 +1,14 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { HYDRATE } from "next-redux-wrapper";
 
-import IAuth from "@/interfaces/IAuth";
+import IAuth, { IContact } from "@/interfaces/IAuth";
+import { IProfile } from "@/interfaces/IUser";
 
 const initialState: IAuth = {
   authState: false,
   token: null,
+  user: null,
+  contacts: [],
 };
 
 export const authSlice = createSlice({
@@ -21,6 +24,13 @@ export const authSlice = createSlice({
     unauthorize: (state) => {
       state.token = null;
       state.authState = false;
+      state.user = null;
+    },
+    setUser: (state, action: PayloadAction<IProfile>) => {
+      state.user = action.payload;
+    },
+    setContacts: (state, action: PayloadAction<IContact[]>) => {
+      state.contacts = [...action.payload];
     },
   },
   extraReducers: {
@@ -33,5 +43,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const { authenticate, setToken, unauthorize } = authSlice.actions;
+export const { authenticate, setToken, unauthorize, setUser, setContacts } =
+  authSlice.actions;
 export default authSlice.reducer;

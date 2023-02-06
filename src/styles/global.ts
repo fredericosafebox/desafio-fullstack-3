@@ -31,7 +31,7 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     .app {
-        background: rgb(var(--grey-4));
+        background:rgb(var(--grey-3));
         display: flex;
         justify-content: center;
         align-items: center;

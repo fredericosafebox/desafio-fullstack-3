@@ -15,7 +15,7 @@ export default async function updateProfileController(
     });
     //@ts-ignore
     const result = await updateProfileService(data, user);
-    return res.status(200).json({ result });
+    return res.status(200).json(result);
   } catch (error) {
     if (error instanceof ValidationError) {
       return res

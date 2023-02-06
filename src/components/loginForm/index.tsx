@@ -7,7 +7,7 @@ import schema from "@/schemas/loginSchema";
 import api from "@/connection/axios";
 import { IoPerson } from "react-icons/io5";
 import { useAppDispatch } from "@/hooks/hooks";
-import { authenticate, setToken } from "@/store/reducers/authSlice";
+import { authenticate, setToken, setUser } from "@/store/reducers/authSlice";
 import { goToSignUp } from "@/store/reducers/homeSlice";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
@@ -25,17 +25,20 @@ export default function LoginForm() {
   const router = useRouter();
 
   const fetchToken = async (data: FormData) => {
-    console.log(data);
     const res = await api
       .post("login", data)
-      .then((res) => {
-        console.log(res.data);
+      .then(async (res) => {
         const token = res.data.token;
-        dispatch(setToken(token));
         window.localStorage.setItem("token", token);
-        dispatch(authenticate(true));
-        toast.success("Seja bem vindo!");
-        router.push("/dashboard", "");
+        dispatch(setToken(token));
+        await api
+          .get("profile", { headers: { Authorization: `Bearer ${token}` } })
+          .then((user) => {
+            dispatch(setUser(user.data));
+            dispatch(authenticate(true));
+            toast.success("Seja bem vindo!");
+            router.push("/dashboard", "");
+          });
       })
       .catch((error) => {
         console.error(error);

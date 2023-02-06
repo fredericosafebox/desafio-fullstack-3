@@ -15,6 +15,20 @@ export default async function createContactContoller(
       .then((data) => {
         return newContactSchema.cast(data, { stripUnknown: true });
       });
+    const contactExists = await prisma.contact.findFirst({
+      where: {
+        phone: phone,
+        //@ts-ignore
+        userId: {
+          equals: user!.id,
+        },
+      },
+    });
+    if (contactExists) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "Este contato já está em sua lista" });
+    }
     const createdContact = await createContactService(
       email!,
       fullName!,

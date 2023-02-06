@@ -3,6 +3,10 @@ import { HYDRATE } from "next-redux-wrapper";
 
 export interface IHomeSlice {
   view: string;
+  modalContact: boolean;
+  modalProfile: boolean;
+  modalContactEdit: boolean;
+  selectedContact: number;
 }
 
 const views = {
@@ -12,6 +16,10 @@ const views = {
 
 const initialState: IHomeSlice = {
   view: "SIGNIN",
+  modalContact: false,
+  modalProfile: false,
+  modalContactEdit: false,
+  selectedContact: 0,
 };
 
 export const homeSlice = createSlice({
@@ -24,8 +32,27 @@ export const homeSlice = createSlice({
     goToSignIn: (state) => {
       state.view = views.signIn;
     },
+    manageProfileModal: (state, action: PayloadAction<boolean>) => {
+      state.modalProfile = action.payload;
+    },
+    manageContactModal: (state, action: PayloadAction<boolean>) => {
+      state.modalContact = action.payload;
+    },
+    editContact: (state, action: PayloadAction<boolean>) => {
+      state.modalContactEdit = action.payload;
+    },
+    selectContact: (state, action: PayloadAction<number>) => {
+      state.selectedContact = action.payload;
+    },
   },
 });
 
-export const { goToSignIn, goToSignUp } = homeSlice.actions;
+export const {
+  goToSignIn,
+  goToSignUp,
+  manageContactModal,
+  manageProfileModal,
+  editContact,
+  selectContact,
+} = homeSlice.actions;
 export default homeSlice.reducer;
